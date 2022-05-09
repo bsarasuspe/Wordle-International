@@ -54,21 +54,23 @@ export const Tile = styled.div`
   justify-content: center;
   align-items: center;
 
-  border: 2px solid #3a3a3c;
+  border: 2px solid #dee1e9;
   font-size: 3.2rem;
   font-weight: bold;
   line-height: 3.2rem;
   text-transform: uppercase;
+  background-color: #f0f2f7;
+  border-radius:5px;
 
   ${({ hint }) => {
     if (hint === "green") {
-      return `background-color: #6aaa64;`;
+        return `background-color: #6aaa64; color: white; border: 0px;`;
     }
     if (hint === "yellow") {
-      return `background-color: #b59f3b;`;
+        return `background-color: #c9b458; color: white; border: 0px;`;
     }
     if (hint === "grey") {
-      return `background-color: #3a3a3c;`;
+        return `background-color: #787c7e; color: white; border: 0px;`;
     }
   }}
 
@@ -102,10 +104,11 @@ export const KeyboardButton = styled.button`
 
   border: 0;
   border-radius: 4px;
-  background-color: #818384;
+  background-color: #dce1ed;
   font-weight: bold;
   text-transform: uppercase;
-  color: #d7dadc;
+  color: #5a6376!important;
+  font-size:14px;
 
   cursor: pointer;
   user-select: none;
