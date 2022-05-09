@@ -1,3 +1,4 @@
+import React, { svg, path } from "react";
 export const BackspaceIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"

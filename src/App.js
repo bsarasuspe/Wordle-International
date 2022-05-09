@@ -16,7 +16,7 @@ import {
 } from "./styled";
 import { BackspaceIcon } from "./icons";
 import "./App.css";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Modal from "react-modal";
 
 const API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en";
