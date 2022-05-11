@@ -24,7 +24,7 @@ const API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en";
 
 const keyboardRows = [
   ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
-  ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
+  ["a", "s", "d", "f", "g", "h", "j", "k", "l", "ñ"],
   ["enter", "z", "x", "c", "v", "b", "n", "m", "backspace"],
 ];
 
@@ -321,7 +321,7 @@ function App() {
                       <Row>
                           <h3>Sartu duzun hitza ez da existitzen.</h3>
                       </Row>
-                      <center><ShareButton onClick={closeWordNotExist}>Itxi</ShareButton></center>
+                      <center><ShareButton onClick={closeWordNotExist}>Ok</ShareButton></center>
                   </wordNotExistModal>
               </Modal>
       </div>

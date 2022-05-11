@@ -107,7 +107,7 @@ export const KeyboardButton = styled.button`
   background-color: #dce1ed;
   font-weight: bold;
   text-transform: uppercase;
-  color: #5a6376!important;
+  color: #5a6376;
   font-size:14px;
 
   cursor: pointer;
@@ -117,15 +117,17 @@ export const KeyboardButton = styled.button`
     margin: 0;
   }
 
-  ${({ disable }) => {
-        if (disable === "true") {
-            return `background-color: #b6bac5;`;
+  ${({ hint }) => {
+        if (hint === "green") {
+            return `background-color: #6aaa64; color: white;`;
         }
-        if (disable === "false") {
-            return `background-color: #dce1ed;`;
+        if (hint === "yellow") {
+            return `background-color: #c9b458; color: white;`;
         }
-    }
-  }
+        if (hint === "grey") {
+            return `background-color: #787c7e; color: white;`;
+        }
+    }}
 `;
 
 export const Flex = styled.div`
@@ -145,7 +147,7 @@ export const ShareButton = styled.button`
   padding: 8px 16px;
   border-radius: 4px;
   border: 2px solid #3a3a3c;
-
+  font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
   transition: background-color 0.2s ease-in;
 
   &:hover {
@@ -167,6 +169,6 @@ export const Row = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-
+  font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
   margin: 16px auto;
 `;
