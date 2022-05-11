@@ -116,6 +116,16 @@ export const KeyboardButton = styled.button`
   &:last-of-type {
     margin: 0;
   }
+
+  ${({ disable }) => {
+        if (disable === "true") {
+            return `background-color: #b6bac5;`;
+        }
+        if (disable === "false") {
+            return `background-color: #dce1ed;`;
+        }
+    }
+  }
 `;
 
 export const Flex = styled.div`
@@ -123,6 +133,10 @@ export const Flex = styled.div`
 `;
 
 export const ShareModal = styled.div`
+  font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+`;
+
+export const wordNotExistModal = styled.div`
   font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
 `;
 

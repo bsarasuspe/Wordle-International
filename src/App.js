@@ -10,6 +10,7 @@ import {
   KeyboardButton,
   Flex,
   ShareModal,
+  wordNotExistModal,
   Heading,
   Row,
   ShareButton,
@@ -62,6 +63,7 @@ function App() {
     5: Array.from({ length: wordLength }).fill(""),
   });
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isErrorModalVisible, setErrorModalVisible] = useState(false);
   const [isShared, setIsShared] = useState(false);
 
   let letterIndex = useRef(0);
@@ -70,6 +72,14 @@ function App() {
   const win = () => {
     document.removeEventListener("keydown", handleKeyDown);
     setModalVisible(true);
+    };
+
+  const wordNotExist = () => {
+    setErrorModalVisible(true);
+    };
+
+  const closeWordNotExist = () => {
+    setErrorModalVisible(false);
   };
 
   const submit = () => {
@@ -161,9 +171,11 @@ function App() {
     if (pressedKey === "enter" && !guesses[round.current].includes("")) {
       const validWord = await fetchWord(guesses[round.current].join(""));
 
-      if (Array.isArray(validWord)) {
-        submit();
-      }
+        if (Array.isArray(validWord)) {
+            submit();
+        } else {
+            wordNotExist();
+        }
     } else if (pressedKey === "backspace") {
       erase();
     } else if (pressedKey !== "enter") {
@@ -280,18 +292,38 @@ function App() {
               transform: "translate(-50%, -50%)",
             },
           }}
-          contentLabel="Share"
-        >
+          contentLabel="Share">
           <ShareModal>
-            <Heading>You win!</Heading>
+            <Heading>Irabazi duzu!</Heading>
             <Row>
-              <h3>Share</h3>
+              <h3>Partekatu</h3>
               <ShareButton onClick={copyMarkers} disabled={isShared}>
                 {isShared ? "Copied!" : "Share"}
               </ShareButton>
             </Row>
           </ShareModal>
-        </Modal>
+              </Modal>
+              <Modal
+                  isOpen={isErrorModalVisible}
+                  onRequestClose={() => setErrorModalVisible(false)}
+                  style={{
+                      content: {
+                          top: "50%",
+                          left: "50%",
+                          right: "auto",
+                          bottom: "auto",
+                          marginRight: "-50%",
+                          transform: "translate(-50%, -50%)",
+                      },
+                  }}
+                  contentLabel="Share">
+                  <wordNotExistModal>
+                      <Row>
+                          <h3>Sartu duzun hitza ez da existitzen.</h3>
+                      </Row>
+                      <center><ShareButton onClick={closeWordNotExist}>Itxi</ShareButton></center>
+                  </wordNotExistModal>
+              </Modal>
       </div>
     </>
   );
