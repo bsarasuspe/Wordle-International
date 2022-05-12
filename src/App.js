@@ -28,9 +28,16 @@ const keyboardRows = [
   ["enter", "z", "x", "c", "v", "b", "n", "m", "backspace"],
 ];
 
+const keyboardColors = {
+    "q": "default", "w": "default", "e": "default", "r": "default", "t": "default", "y": "default", "u": "default", "i": "default", "o": "default", "p": "default",
+    "a": "default", "s": "default", "d": "default", "f": "default", "g": "default", "h": "default", "j": "default", "k": "default", "l": "default", "ñ": "default",
+"enter": "default", "z": "default", "x": "default", "c": "default", "v": "default", "b": "default", "n": "default", "m": "default", "backspace": "default"};
+
 const allKeys = keyboardRows.flat();
 
 const wordLength = 5;
+
+const keyboardDisabled = "false";
 
 const newGame = {
   0: Array.from({ length: wordLength }).fill(""),
@@ -72,6 +79,7 @@ function App() {
   const win = () => {
     document.removeEventListener("keydown", handleKeyDown);
     setModalVisible(true);
+    keyboardDisabled = "true"
     };
 
   const wordNotExist = () => {
@@ -99,6 +107,7 @@ function App() {
 
       if (guessedLetter === letter) {
         updatedMarkers[_round][index] = "green";
+        keyboardColors[letter] = "green";
         tempWord[index] = "";
       } else {
         // We will use this to mark other letters for hints
@@ -123,11 +132,13 @@ function App() {
           correctPositionOfLetter !== index
         ) {
           // Mark yellow when letter is in the word of the day but in the wrong spot
-          updatedMarkers[_round][index] = "yellow";
+            updatedMarkers[_round][index] = "yellow";
+            keyboardColors[guessedLetter] = "yellow";
           tempWord[correctPositionOfLetter] = "";
         } else {
           // This means the letter is not in the word of the day.
-          updatedMarkers[_round][index] = "grey";
+            updatedMarkers[_round][index] = "grey";
+            keyboardColors[guessedLetter] = "grey";
         }
       });
     }
@@ -265,8 +276,10 @@ function App() {
             <KeyboardRow key={i}>
               {i === 1 && <Flex item={0.5} />}
               {keys.map((key) => (
-                <KeyboardButton
+                  <KeyboardButton
+                  disabled={keyboardDisabled}
                   key={key}
+                  hint={keyboardColors[key]}
                   onClick={() => handleClick(key)}
                   flex={["enter", "backspace"].includes(key) ? 1.5 : 1}
                 >

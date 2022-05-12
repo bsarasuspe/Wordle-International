@@ -127,6 +127,9 @@ export const KeyboardButton = styled.button`
         if (hint === "grey") {
             return `background-color: #787c7e; color: white;`;
         }
+        if (hint === "default") {
+            return `background-color: #dce1ed; color: #5a6376;`;
+        }
     }}
 `;
 
