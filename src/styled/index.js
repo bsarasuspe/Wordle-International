@@ -101,6 +101,8 @@ export const KeyboardButton = styled.button`
   padding: 0;
   margin: 0 6px 0 0;
   height: 58px;
+  text-decoration:none;
+  color:black;
   ${({ item }) => (item ? `flex: ${item};` : `flex: 1;`)}
 
   border: 0;

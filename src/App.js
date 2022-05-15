@@ -10,7 +10,6 @@ import {
   KeyboardButton,
   Flex,
   ShareModal,
-  wordNotExistModal,
   Heading,
   Row,
   ShareButton,
@@ -35,6 +34,12 @@ const keyboardColors = {
     "a": "default", "s": "default", "d": "default", "f": "default", "g": "default", "h": "default", "j": "default", "k": "default", "l": "default", "ñ": "default",
 "enter": "default", "z": "default", "x": "default", "c": "default", "v": "default", "b": "default", "n": "default", "m": "default", "backspace": "default"};
 
+const texts = {
+    "es": ["ES", "Ayuda", "La palabra que has metido no existe.", "¡Has ganado!", "Compartir", "¡Copiado!", "¡Has perdido!", "Cerrar", "Elige el idioma:", "La respuesta era:"],
+    "en": ["EN", "Help", "The word you entered does not exist.", "You won!", "Share", "Copied!", "You lost!", "Close", "Choose the language:", "The answer was:"],
+    "eu": ["EU", "Laguntza", "Sartu duzun hitza ez da existitzen.", "Irabazi duzu!", "Partekatu", "Kopiatuta!", "Galdu egin duzu!", "Itxi", "Aukeratu hizkuntza:", "Emaitza hau zen:"]
+};
+
 const allKeys = keyboardRows.flat();
 
 const wordLength = 5;
@@ -53,9 +58,19 @@ const newGame = {
   5: Array.from({ length: wordLength }).fill(""),
 };
 
+let lang = "es";
+
 const fetchWord = (word) => {
+    var wordsArray = [];
+    if (lang == "es") {
+        wordsArray = wordsArrayES;
+    } else if (lang == "eu") {
+        wordsArray = wordsArrayEU;
+    } else {
+        wordsArray = wordsArrayES;
+    }
     var lag = [];
-    if (wordsArrayEU.includes(word)) {
+    if (wordsArray.includes(word)) {
         return lag;
     } else {
         return null;
@@ -70,6 +85,11 @@ const fetchWord = (word) => {
 };
 
 function App() {
+
+    let search = window.location.search;
+    let params = new URLSearchParams(search);
+    lang = params.get('language');
+
     JsonDataEU.hitzak && JsonDataEU.hitzak.map(item => {
         return (wordsArrayEU.push(item.hitza))
     });
@@ -80,7 +100,7 @@ function App() {
 
 //  console.log(wordsArray);
 
-  const wordOfTheDay = "laino";
+    const wordOfTheDay = "laino";
 
   const [guesses, setGuesses] = useState({ ...newGame });
   const [markers, setMarkers] = useState({
@@ -303,7 +323,7 @@ function App() {
   return (
     <>
       <Main>
-              <Header><ShareButton onClick={language}>ES</ShareButton> WORDLE <ShareButton onClick={language}>HELP</ShareButton></Header>
+              <Header><ShareButton onClick={language}>{texts[lang][0]}</ShareButton> WORDLE <ShareButton onClick={language}>{texts[lang][1]}</ShareButton></Header>
         <GameSection>
           <TileContainer>
             {Object.values(guesses).map((word, wordIndex) => (
@@ -353,7 +373,7 @@ function App() {
           }}
           contentLabel="Share">
           <ShareModal>
-            <Heading>Irabazi duzu!</Heading>
+                      <Heading>{texts[lang][3]}</Heading>
             <Row>
               <h3>Partekatu</h3>
               <ShareButton onClick={copyMarkers} disabled={isShared}>
@@ -378,9 +398,9 @@ function App() {
                   contentLabel="Share">
                   <wordNotExistModal>
                       <Row>
-                          <h3>Sartu duzun hitza ez da existitzen.</h3>
+                          <h3>{texts[lang][2]}</h3>
                       </Row>
-                      <center><ShareButton onClick={closeWordNotExist}>Ok</ShareButton></center>
+                      <center><ShareButton onClick={closeWordNotExist}>{texts[lang][7]}</ShareButton></center>
                   </wordNotExistModal>
               </Modal>
               <Modal
@@ -398,10 +418,11 @@ function App() {
                   }}
                   contentLabel="Share">
                   <gameoverModal>
+                      <Heading>{texts[lang][6]}</Heading>
                       <Row>
-                          <h3>Ez duzu irabazi. Erantzuna {wordOfTheDay} zen.</h3>
+                          <h3>{texts[lang][9]} {wordOfTheDay}</h3>
                       </Row>
-                      <center><ShareButton onClick={closeGameOver}>Ok</ShareButton></center>
+                      <center><ShareButton onClick={closeGameOver}>{texts[lang][7]}</ShareButton></center>
                   </gameoverModal>
               </Modal>
               <Modal
@@ -420,9 +441,13 @@ function App() {
                   contentLabel="Share">
                   <languageModal>
                       <Row>
-                          <h3>Aukeratu hizkuntza:</h3>
+                          <h3>{texts[lang][8]}</h3>
                       </Row>
-                      <center><ShareButton onClick={closeLanguage}>Itxi</ShareButton></center>
+                      
+                      <Row><center><a href="./?language=en"><ShareButton>English</ShareButton></a>
+                          <a href="./?language=eu"><ShareButton>Euskera</ShareButton></a>
+                          <a href="./?language=es"><ShareButton>Castellano</ShareButton></a></center></Row>
+                          <center><ShareButton onClick={closeLanguage}>{texts[lang][7]}</ShareButton></center>
                   </languageModal>
               </Modal>
       </div>
