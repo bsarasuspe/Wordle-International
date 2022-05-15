@@ -4,8 +4,9 @@
     "\\public",
     "\\src",
     "\\src\\icons",
+    "\\src\\json",
     "\\src\\styled"
   ],
-  "SelectedNode": "\\src\\icons\\index.js",
+  "SelectedNode": "\\src\\json\\hiztegiJSON-ES.json",
   "PreviewInSolutionExplorer": false
 }

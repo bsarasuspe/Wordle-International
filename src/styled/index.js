@@ -61,6 +61,7 @@ export const Tile = styled.div`
   text-transform: uppercase;
   background-color: #f0f2f7;
   border-radius:5px;
+  transition: background-color 200ms linear;
 
   ${({ hint }) => {
     if (hint === "green") {
@@ -109,9 +110,29 @@ export const KeyboardButton = styled.button`
   text-transform: uppercase;
   color: #5a6376;
   font-size:14px;
+  transition: background-color 200ms linear;
 
   cursor: pointer;
   user-select: none;
+
+  &:hover {
+    background-color: #bfc3cd;
+
+  ${({ hint }) => {
+        if (hint === "green") {
+            return `background-color: #578b52; color: white;`;
+        }
+        if (hint === "yellow") {
+            return `background-color: #a9974a; color: white;`;
+        }
+        if (hint === "grey") {
+            return `background-color: #595c5d; color: white;`;
+        }
+        if (hint === "default") {
+            return `background-color: #bfc3cd; color: #5a6376;`;
+        }
+    }}
+  }
 
   &:last-of-type {
     margin: 0;
@@ -145,16 +166,23 @@ export const wordNotExistModal = styled.div`
   font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
 `;
 
+export const gameoverModal = styled.div`
+  font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+`;
+
 export const ShareButton = styled.button`
   font-size: 18px;
   padding: 8px 16px;
   border-radius: 4px;
-  border: 2px solid #3a3a3c;
+  margin-left: 15px;
+  background-color: #f0f2f7;
+  margin-right: 15px;
+  border: 2px solid #dee1e9;
   font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
   transition: background-color 0.2s ease-in;
 
   &:hover {
-    background-color: #818384;
+    background-color: #d2d4d8;
   }
 `;
 

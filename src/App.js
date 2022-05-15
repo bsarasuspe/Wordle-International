@@ -17,8 +17,10 @@ import {
 } from "./styled";
 import { BackspaceIcon } from "./icons";
 import "./App.css";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, DropDown, DropDownItem, DropDownMenu, DropDownToggle} from "react";
 import Modal from "react-modal";
+import JsonDataES from './json/hiztegiJSON-ES.json';
+import JsonDataEU from './json/hiztegiJSON-EUS.json';
 
 const API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en";
 
@@ -39,6 +41,9 @@ const wordLength = 5;
 
 const keyboardDisabled = "false";
 
+var wordsArrayES = [];
+var wordsArrayEU = [];
+
 const newGame = {
   0: Array.from({ length: wordLength }).fill(""),
   1: Array.from({ length: wordLength }).fill(""),
@@ -49,16 +54,33 @@ const newGame = {
 };
 
 const fetchWord = (word) => {
-  return fetch(`${API_URL}/${word}`, {
+    var lag = [];
+    if (wordsArrayEU.includes(word)) {
+        return lag;
+    } else {
+        return null;
+    }
+/*  return fetch(`${API_URL}/${word}`, {
     method: "GET",
   })
     .then((res) => res.json())
     .then((res) => res)
-    .catch((err) => console.log("err:", err));
+    .catch((err) => console.log("err:", err));*/
+    
 };
 
 function App() {
-  const wordOfTheDay = "money";
+    JsonDataEU.hitzak && JsonDataEU.hitzak.map(item => {
+        return (wordsArrayEU.push(item.hitza))
+    });
+
+    JsonDataES.hitzak && JsonDataES.hitzak.map(item => {
+        return (wordsArrayES.push(item.hitza))
+    });
+
+//  console.log(wordsArray);
+
+  const wordOfTheDay = "laino";
 
   const [guesses, setGuesses] = useState({ ...newGame });
   const [markers, setMarkers] = useState({
@@ -71,6 +93,8 @@ function App() {
   });
   const [isModalVisible, setModalVisible] = useState(false);
   const [isErrorModalVisible, setErrorModalVisible] = useState(false);
+  const [isGameOverModalVisible, setGameOverModalVisible] = useState(false);
+  const [isLanguageModalVisible, setLanguageModalVisible] = useState(false);
   const [isShared, setIsShared] = useState(false);
 
   let letterIndex = useRef(0);
@@ -88,7 +112,25 @@ function App() {
 
   const closeWordNotExist = () => {
     setErrorModalVisible(false);
-  };
+    };
+
+    const gameOver = () => {
+        setGameOverModalVisible(true);
+        document.removeEventListener("keydown", handleKeyDown);
+        keyboardDisabled = "true"
+    };
+
+    const closeGameOver = () => {
+        setGameOverModalVisible(false);
+    };
+
+    const language = () => {
+        setLanguageModalVisible(true);
+    };
+
+    const closeLanguage = () => {
+        setLanguageModalVisible(false);
+    };
 
   const submit = () => {
     const _round = round.current;
@@ -119,13 +161,13 @@ function App() {
       setMarkers(updatedMarkers);
       win();
       return;
-    }
+      }
 
     // Then find the letters in wrong spots
     if (leftoverIndices.length) {
       leftoverIndices.forEach((index) => {
         const guessedLetter = guesses[_round][index];
-        const correctPositionOfLetter = tempWord.indexOf(guessedLetter);
+          const correctPositionOfLetter = tempWord.indexOf(guessedLetter);
 
         if (
           tempWord.includes(guessedLetter) &&
@@ -139,8 +181,12 @@ function App() {
           // This means the letter is not in the word of the day.
             updatedMarkers[_round][index] = "grey";
             keyboardColors[guessedLetter] = "grey";
-        }
+          }
       });
+
+        if (_round == 5) {
+            gameOver();
+        }
     }
 
     setMarkers(updatedMarkers);
@@ -180,7 +226,7 @@ function App() {
 
   const enterGuess = async (pressedKey) => {
     if (pressedKey === "enter" && !guesses[round.current].includes("")) {
-      const validWord = await fetchWord(guesses[round.current].join(""));
+      const validWord = fetchWord(guesses[round.current].join(""));
 
         if (Array.isArray(validWord)) {
             submit();
@@ -257,7 +303,7 @@ function App() {
   return (
     <>
       <Main>
-        <Header>WORDLE</Header>
+              <Header><ShareButton onClick={language}>ES</ShareButton> WORDLE <ShareButton onClick={language}>HELP</ShareButton></Header>
         <GameSection>
           <TileContainer>
             {Object.values(guesses).map((word, wordIndex) => (
@@ -336,6 +382,48 @@ function App() {
                       </Row>
                       <center><ShareButton onClick={closeWordNotExist}>Ok</ShareButton></center>
                   </wordNotExistModal>
+              </Modal>
+              <Modal
+                  isOpen={isGameOverModalVisible}
+                  onRequestClose={() => setGameOverModalVisible(false)}
+                  style={{
+                      content: {
+                          top: "50%",
+                          left: "50%",
+                          right: "auto",
+                          bottom: "auto",
+                          marginRight: "-50%",
+                          transform: "translate(-50%, -50%)",
+                      },
+                  }}
+                  contentLabel="Share">
+                  <gameoverModal>
+                      <Row>
+                          <h3>Ez duzu irabazi. Erantzuna {wordOfTheDay} zen.</h3>
+                      </Row>
+                      <center><ShareButton onClick={closeGameOver}>Ok</ShareButton></center>
+                  </gameoverModal>
+              </Modal>
+              <Modal
+                  isOpen={isLanguageModalVisible}
+                  onRequestClose={() => setLanguageModalVisible(false)}
+                  style={{
+                      content: {
+                          top: "50%",
+                          left: "50%",
+                          right: "auto",
+                          bottom: "auto",
+                          marginRight: "-50%",
+                          transform: "translate(-50%, -50%)",
+                      },
+                  }}
+                  contentLabel="Share">
+                  <languageModal>
+                      <Row>
+                          <h3>Aukeratu hizkuntza:</h3>
+                      </Row>
+                      <center><ShareButton onClick={closeLanguage}>Itxi</ShareButton></center>
+                  </languageModal>
               </Modal>
       </div>
     </>
