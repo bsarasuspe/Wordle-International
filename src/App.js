@@ -49,6 +49,8 @@ const keyboardDisabled = "false";
 var wordsArrayES = [];
 var wordsArrayEU = [];
 
+var showWord = "";
+
 const newGame = {
   0: Array.from({ length: wordLength }).fill(""),
   1: Array.from({ length: wordLength }).fill(""),
@@ -89,6 +91,9 @@ function App() {
     let search = window.location.search;
     let params = new URLSearchParams(search);
     lang = params.get('language');
+    if (lang == null) {
+        lang = "es";
+    };
 
     JsonDataEU.hitzak && JsonDataEU.hitzak.map(item => {
         return (wordsArrayEU.push(item.hitza))
@@ -100,7 +105,25 @@ function App() {
 
 //  console.log(wordsArray);
 
-    const wordOfTheDay = "laino";
+    var wordOfTheDay = "merey";
+
+    if (lang == "es") {
+        const min = 0;
+        const max = wordsArrayES.length;
+        console.log(max);
+        const rand = min + Math.random() * (max - min);
+        wordOfTheDay = wordsArrayES[parseInt(rand)];
+    } else if (lang == "eu") {
+        const min = 0;
+        const max = wordsArrayEU.length;
+        const rand = min + Math.random() * (max - min);
+        wordOfTheDay = wordsArrayEU[parseInt(rand)];
+    } else {
+        const min = 0;
+        const max = wordsArrayES.length;
+        const rand = min + Math.random() * (max - min);
+        wordOfTheDay = wordsArrayES[parseInt(rand)];
+    }
 
   const [guesses, setGuesses] = useState({ ...newGame });
   const [markers, setMarkers] = useState({
@@ -111,6 +134,7 @@ function App() {
     4: Array.from({ length: wordLength }).fill(""),
     5: Array.from({ length: wordLength }).fill(""),
   });
+
   const [isModalVisible, setModalVisible] = useState(false);
   const [isErrorModalVisible, setErrorModalVisible] = useState(false);
   const [isGameOverModalVisible, setGameOverModalVisible] = useState(false);
@@ -135,9 +159,11 @@ function App() {
     };
 
     const gameOver = () => {
+        console.log(wordOfTheDay);
         setGameOverModalVisible(true);
         document.removeEventListener("keydown", handleKeyDown);
-        keyboardDisabled = "true"
+        keyboardDisabled = "true";
+        console.log(wordOfTheDay);
     };
 
     const closeGameOver = () => {
@@ -159,7 +185,9 @@ function App() {
       ...markers,
     };
 
-    const tempWord = wordOfTheDay.split("");
+      const tempWord = wordOfTheDay.split("");
+      console.log(wordOfTheDay);
+      showWord = wordOfTheDay;
 
     const leftoverIndices = [];
 
@@ -375,7 +403,7 @@ function App() {
           <ShareModal>
                       <Heading>{texts[lang][3]}</Heading>
             <Row>
-              <h3>Partekatu</h3>
+              <h3>{texts[lang][4]}</h3>
               <ShareButton onClick={copyMarkers} disabled={isShared}>
                 {isShared ? "Copied!" : "Share"}
               </ShareButton>
@@ -396,12 +424,12 @@ function App() {
                       },
                   }}
                   contentLabel="Share">
-                  <wordNotExistModal>
+                  <ShareModal>
                       <Row>
                           <h3>{texts[lang][2]}</h3>
                       </Row>
                       <center><ShareButton onClick={closeWordNotExist}>{texts[lang][7]}</ShareButton></center>
-                  </wordNotExistModal>
+                  </ShareModal>
               </Modal>
               <Modal
                   isOpen={isGameOverModalVisible}
@@ -417,13 +445,13 @@ function App() {
                       },
                   }}
                   contentLabel="Share">
-                  <gameoverModal>
+                  <ShareModal>
                       <Heading>{texts[lang][6]}</Heading>
                       <Row>
-                          <h3>{texts[lang][9]} {wordOfTheDay}</h3>
+                          <h3>{texts[lang][9]} {showWord}</h3>
                       </Row>
                       <center><ShareButton onClick={closeGameOver}>{texts[lang][7]}</ShareButton></center>
-                  </gameoverModal>
+                  </ShareModal>
               </Modal>
               <Modal
                   isOpen={isLanguageModalVisible}
@@ -439,7 +467,7 @@ function App() {
                       },
                   }}
                   contentLabel="Share">
-                  <languageModal>
+                  <ShareModal>
                       <Row>
                           <h3>{texts[lang][8]}</h3>
                       </Row>
@@ -448,7 +476,7 @@ function App() {
                           <a href="./?language=eu"><ShareButton>Euskera</ShareButton></a>
                           <a href="./?language=es"><ShareButton>Castellano</ShareButton></a></center></Row>
                           <center><ShareButton onClick={closeLanguage}>{texts[lang][7]}</ShareButton></center>
-                  </languageModal>
+                  </ShareModal>
               </Modal>
       </div>
     </>
