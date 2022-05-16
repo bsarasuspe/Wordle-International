@@ -20,6 +20,7 @@ import React, { useEffect, useRef, useState, DropDown, DropDownItem, DropDownMen
 import Modal from "react-modal";
 import JsonDataES from './json/hiztegiJSON-ES.json';
 import JsonDataEU from './json/hiztegiJSON-EUS.json';
+import JsonDataEN from './json/hiztegiJSON-EN.json';
 
 const API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en";
 
@@ -48,6 +49,7 @@ const keyboardDisabled = "false";
 
 var wordsArrayES = [];
 var wordsArrayEU = [];
+var wordsArrayEN = [];
 
 var showWord = "";
 
@@ -69,7 +71,7 @@ const fetchWord = (word) => {
     } else if (lang == "eu") {
         wordsArray = wordsArrayEU;
     } else {
-        wordsArray = wordsArrayES;
+        wordsArray = wordsArrayEN;
     }
     var lag = [];
     if (wordsArray.includes(word)) {
@@ -103,6 +105,10 @@ function App() {
         return (wordsArrayES.push(item.hitza))
     });
 
+    JsonDataEN.hitzak && JsonDataEN.hitzak.map(item => {
+        return (wordsArrayEN.push(item.hitza))
+    });
+
 //  console.log(wordsArray);
 
     var wordOfTheDay = "merey";
@@ -120,9 +126,9 @@ function App() {
         wordOfTheDay = wordsArrayEU[parseInt(rand)];
     } else {
         const min = 0;
-        const max = wordsArrayES.length;
+        const max = wordsArrayEN.length;
         const rand = min + Math.random() * (max - min);
-        wordOfTheDay = wordsArrayES[parseInt(rand)];
+        wordOfTheDay = wordsArrayEN[parseInt(rand)];
     }
 
   const [guesses, setGuesses] = useState({ ...newGame });
