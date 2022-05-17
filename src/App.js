@@ -303,6 +303,7 @@ function App() {
               i++;
           }
       }
+      console.log(wordsArrayLaguntza);
   };
 
   const erase = () => {
