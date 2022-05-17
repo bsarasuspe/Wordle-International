@@ -52,6 +52,7 @@ var wordsArrayEU = [];
 var wordsArrayEN = [];
 
 var wordsArrayLaguntza = []; // Laguntza eskatzerakoan agertuko diren hitzak gordetzeko
+var arrayLaguntzaile = []; // Aurreko arrayarekin laguntzeko
 
 var showWord = "";
 
@@ -294,30 +295,32 @@ function App() {
     round.current = _round + 1;
     letterIndex.current = 0;
       var kont = 0;
+      arrayLaguntzaile = [];
       for (const hitza in wordsArrayLaguntza) {
           console.log(regBerde);
           console.log(regHori);
           console.log(regGrisLag);
           
-          if (!(wordsArrayLaguntza[hitza].match(regBerde)) | !(wordsArrayLaguntza[hitza].match(regHori)) | !(wordsArrayLaguntza[hitza].match(regGrisLag))) { //ez bada expresio erregularretako bat betetzen bakarrik egin
+          if (wordsArrayLaguntza[hitza].match(regBerde) % wordsArrayLaguntza[hitza].match(regHori) % wordsArrayLaguntza[hitza].match(regGrisLag)) { //ez bada expresio erregularretako bat betetzen bakarrik egin
               console.log("hitza: " + wordsArrayLaguntza[hitza]);
-              if (!(wordsArrayLaguntza[hitza].match(regBerde))) {
-                  console.log("expresio erregular berdea ez da bete")
+              if (wordsArrayLaguntza[hitza].match(regBerde)) {
+                  console.log("expresio erregular berdea bete da")
               }
-              if (!(wordsArrayLaguntza[hitza].match(regHori))) {
-                  console.log("expresio erregular horia ez da bete")
+              if (wordsArrayLaguntza[hitza].match(regHori)) {
+                  console.log("expresio erregular horia bete da")
               }
-              if (!(wordsArrayLaguntza[hitza].match(regGrisLag))) {
-                  console.log("expresio erregular grisa ez da bete")
+              if ((wordsArrayLaguntza[hitza].match(regGrisLag)) {
+                  console.log("expresio erregular grisa bete da")
               }
               kont++;
-              //console.log("kendu: " + wordsArrayLaguntza[hitza]);
-              wordsArrayLaguntza.splice(hitza, 1); // baldintzak betetzen ez dituzten hitzak kentzen dira.
+              //console.log("gehitu: " + wordsArrayLaguntza[hitza]);
+              arrayLaguntzaile.push(wordsArrayLaguntza[hitza]); // baldintzak betetzen ez dituzten hitzak kentzen dira.
           } else {
-              console.log("HITZ EGOKIA: " + wordsArrayLaguntza[hitza]);
+              console.log("HITZ DESEGOKIA: " + wordsArrayLaguntza[hitza]);
           }
       }
-      console.log("kendu dira: "+kont);
+      wordsArrayLaguntza = arrayLaguntzaile
+      console.log("gehitu dira: "+kont);
       console.log("array-ean daude: " + wordsArrayLaguntza.length);
       console.log(wordsArrayLaguntza);
   };
