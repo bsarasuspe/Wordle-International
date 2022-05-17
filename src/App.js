@@ -36,16 +36,16 @@ const keyboardColors = {
 "enter": "default", "z": "default", "x": "default", "c": "default", "v": "default", "b": "default", "n": "default", "m": "default", "backspace": "default"};
 
 const texts = {
-    "es": ["ES", "Ayuda", "La palabra que has metido no existe.", "¡Has ganado!", "Compartir", "¡Copiado!", "¡Has perdido!", "Cerrar", "Elige el idioma:", "La respuesta era:"],
-    "en": ["EN", "Help", "The word you entered does not exist.", "You won!", "Share", "Copied!", "You lost!", "Close", "Choose the language:", "The answer was:"],
-    "eu": ["EU", "Laguntza", "Sartu duzun hitza ez da existitzen.", "Irabazi duzu!", "Partekatu", "Kopiatuta!", "Galdu egin duzu!", "Itxi", "Aukeratu hizkuntza:", "Emaitza hau zen:"]
+    "es": ["ES", "Ayuda", "La palabra que has metido no existe.", "¡Has ganado!", "Compartir", "¡Copiado!", "¡Has perdido!", "Cerrar", "Elige el idioma:", "La respuesta era:", "Palabras posibles:"],
+    "en": ["EN", "Help", "The word you entered does not exist.", "You won!", "Share", "Copied!", "You lost!", "Close", "Choose the language:", "The answer was:", "Posible words:"],
+    "eu": ["EU", "Laguntza", "Sartu duzun hitza ez da existitzen.", "Irabazi duzu!", "Partekatu", "Kopiatuta!", "Galdu egin duzu!", "Itxi", "Aukeratu hizkuntza:", "Emaitza hau zen:", "Hitz posibleak:"]
 };
 
 const allKeys = keyboardRows.flat();
 
 const wordLength = 5;
 
-var keyboardDisabled = "false";
+var keyboardDisabled = false;
 
 var wordsArrayES = [];
 var wordsArrayEU = [];
@@ -177,7 +177,7 @@ function App() {
   const win = () => {
     document.removeEventListener("keydown", handleKeyDown);
     setModalVisible(true);
-    keyboardDisabled = "true"
+    keyboardDisabled = true;
     };
 
   const wordNotExist = () => {
@@ -192,7 +192,7 @@ function App() {
         console.log(wordOfTheDay);
         setGameOverModalVisible(true);
         document.removeEventListener("keydown", handleKeyDown);
-        keyboardDisabled = "true";
+        keyboardDisabled = true;
         console.log(wordOfTheDay);
     };
 
@@ -573,7 +573,7 @@ function App() {
                   contentLabel="Share">
                   <ShareModal>
                       <Row>
-                          <h3>Hitz posibleak:</h3>
+                          <h3>{texts[lang][10]}</h3>
                       </Row>
                       <Row><div style={{ width: "250px"}}>
                           {wordsArrayLaguntza.map(word => <div style={{ float: "left" }}>{word} &nbsp;</div>)}
