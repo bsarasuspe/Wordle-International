@@ -299,18 +299,26 @@ function App() {
           console.log(regHori);
           console.log(regGrisLag);
           
-          if ((!wordsArrayLaguntza[hitza].match("/" + regBerde + "/i")) | (!wordsArrayLaguntza[hitza].match("/" + regHori + "/i")) | (!wordsArrayLaguntza[hitza].match("/" + regGrisLag + "/i"))) { //ez bada expresio erregularretako bat betetzen bakarrik egin
-              kont++;
-              console.log("kendu");
-              const index = wordsArrayLaguntza.indexOf(hitza);
-              if (index > -1) {
-                  wordsArrayLaguntza.splice(index, 1); // baldintzak betetzen ez dituzten hitzak kentzen dira.
+          if (!(wordsArrayLaguntza[hitza].match(regBerde)) | !(wordsArrayLaguntza[hitza].match(regHori)) | !(wordsArrayLaguntza[hitza].match(regGrisLag))) { //ez bada expresio erregularretako bat betetzen bakarrik egin
+              console.log("hitza: " + wordsArrayLaguntza[hitza]);
+              if (!(wordsArrayLaguntza[hitza].match(regBerde))) {
+                  console.log("expresio erregular berdea ez da bete")
               }
+              if (!(wordsArrayLaguntza[hitza].match(regHori))) {
+                  console.log("expresio erregular horia ez da bete")
+              }
+              if (!(wordsArrayLaguntza[hitza].match(regGrisLag))) {
+                  console.log("expresio erregular grisa ez da bete")
+              }
+              kont++;
+              //console.log("kendu: " + wordsArrayLaguntza[hitza]);
+              wordsArrayLaguntza.splice(hitza, 1); // baldintzak betetzen ez dituzten hitzak kentzen dira.
+          } else {
+              console.log("HITZ EGOKIA: " + wordsArrayLaguntza[hitza]);
           }
       }
       console.log("kendu dira: "+kont);
-      console.log("Ondoren:");
-      console.log(wordsArrayLaguntza.length);
+      console.log("array-ean daude: " + wordsArrayLaguntza.length);
       console.log(wordsArrayLaguntza);
   };
 
