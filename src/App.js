@@ -266,6 +266,7 @@ function App() {
             tempWord[correctPositionOfLetter] = "";
 
             regHori = regHori + "(?=.*" + guessedLetter + ")" + "(?=" + regHoriLag + "[^" + guessedLetter + "])"; //letra horia hitzean dagoela baina ez dagoen posizioan ez dagoela jartzen da.
+            regHoriLag = regHoriLag + ".";
         } else {
           // This means the letter is not in the word of the day.
             updatedMarkers[_round][index] = "grey";
