@@ -294,32 +294,16 @@ function App() {
     round.current = _round + 1;
     letterIndex.current = 0;
       var kont = 0;
-      for (const hitza in wordsArrayLaguntza) {
-          console.log(regBerde);
-          console.log(regHori);
-          console.log(regGrisLag);
-          
-          if (!(wordsArrayLaguntza[hitza].match(regBerde)) | !(wordsArrayLaguntza[hitza].match(regHori)) | !(wordsArrayLaguntza[hitza].match(regGrisLag))) { //ez bada expresio erregularretako bat betetzen bakarrik egin
-              console.log("hitza: " + wordsArrayLaguntza[hitza]);
-              if (!(wordsArrayLaguntza[hitza].match(regBerde))) {
-                  console.log("expresio erregular berdea ez da bete")
-              }
-              if (!(wordsArrayLaguntza[hitza].match(regHori))) {
-                  console.log("expresio erregular horia ez da bete")
-              }
-              if (!(wordsArrayLaguntza[hitza].match(regGrisLag))) {
-                  console.log("expresio erregular grisa ez da bete")
-              }
+      var i = 0;
+      while (i < wordsArrayLaguntza.length) {
+          console.log(wordsArrayLaguntza[i]+" "+i);
+          if (!(wordsArrayLaguntza[i].match(regBerde)) | !(wordsArrayLaguntza[i].match(regHori)) | !(wordsArrayLaguntza[i].match(regGrisLag))) { //ez bada expresio erregularretako bat betetzen bakarrik egin
               kont++;
-              //console.log("kendu: " + wordsArrayLaguntza[hitza]);
-              wordsArrayLaguntza.splice(hitza, 1); // baldintzak betetzen ez dituzten hitzak kentzen dira.
+              wordsArrayLaguntza.splice(i, 1); // baldintzak betetzen ez dituzten hitzak kentzen dira.
           } else {
-              console.log("HITZ EGOKIA: " + wordsArrayLaguntza[hitza]);
+              i++;
           }
       }
-      console.log("kendu dira: "+kont);
-      console.log("array-ean daude: " + wordsArrayLaguntza.length);
-      console.log(wordsArrayLaguntza);
   };
 
   const erase = () => {
