@@ -296,7 +296,6 @@ function App() {
       var kont = 0;
       var i = 0;
       while (i < wordsArrayLaguntza.length) {
-          console.log(wordsArrayLaguntza[i]+" "+i);
           if (!(wordsArrayLaguntza[i].match(regBerde)) | !(wordsArrayLaguntza[i].match(regHori)) | !(wordsArrayLaguntza[i].match(regGrisLag))) { //ez bada expresio erregularretako bat betetzen bakarrik egin
               kont++;
               wordsArrayLaguntza.splice(i, 1); // baldintzak betetzen ez dituzten hitzak kentzen dira.
