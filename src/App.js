@@ -51,6 +51,8 @@ var wordsArrayES = [];
 var wordsArrayEU = [];
 var wordsArrayEN = [];
 
+var wordsArrayLaguntza = []; // Laguntza eskatzerakoan agertuko diren hitzak gordetzeko
+
 var showWord = "";
 
 const newGame = {
@@ -119,16 +121,19 @@ function App() {
         console.log(max);
         const rand = min + Math.random() * (max - min);
         wordOfTheDay = wordsArrayES[parseInt(rand)];
+        wordsArrayLaguntza = wordsArrayES; // Erabiliko den hiztegiaren kopia bat gorde laguntzarako erabiltzeko
     } else if (lang == "eu") {
         const min = 0;
         const max = wordsArrayEU.length;
         const rand = min + Math.random() * (max - min);
         wordOfTheDay = wordsArrayEU[parseInt(rand)];
+        wordsArrayLaguntza = wordsArrayEU;
     } else {
         const min = 0;
         const max = wordsArrayEN.length;
         const rand = min + Math.random() * (max - min);
         wordOfTheDay = wordsArrayEN[parseInt(rand)];
+        wordsArrayLaguntza = wordsArrayEN;
     }
 
   const [guesses, setGuesses] = useState({ ...newGame });
@@ -197,6 +202,12 @@ function App() {
 
     const leftoverIndices = [];
 
+      var regBerde = "^"; //Laguntzarako hiztegia letra berdeen arabera filtratzeko expresio erregularra.
+      var regHori = "^"; //Laguntzarako hiztegia letra horien arabera filtratzeko expresio erregularra.
+      var regHoriLag = "^" //Expresio horian erabiliko den expresio laguntzaile bat.
+      var regGris = "^[^"; //Laguntzarako hiztegia letra grisen arabera filtratzeko expresio erregularra.
+      var regGrisLag = "^.{5}$" //Expresio grisean laguntzeko. Ez badago hitz grisik errorea ematen duelako.
+
     // Prioritize the letters in the correct spot
     tempWord.forEach((letter, index) => {
       const guessedLetter = guesses[_round][index];
@@ -204,12 +215,18 @@ function App() {
       if (guessedLetter === letter) {
         updatedMarkers[_round][index] = "green";
         keyboardColors[letter] = "green";
-        tempWord[index] = "";
+          tempWord[index] = "";
+
+          regBerde = regBerde + guessedLetter; //asmatutako letra dagokion posizioan jartzen da expresioan.
       } else {
+          regBerde = regBerde + "."; //posizio honetako letra edozein izan daitekela jartzen da expresioan.
+
         // We will use this to mark other letters for hints
         leftoverIndices.push(index);
       }
     });
+
+      regBerde = regBerde + "$" //letra berdeen expresio erregularra bukatzen da.
 
     if (updatedMarkers[_round].every((guess) => guess === "green")) {
       setMarkers(updatedMarkers);
@@ -230,13 +247,35 @@ function App() {
           // Mark yellow when letter is in the word of the day but in the wrong spot
             updatedMarkers[_round][index] = "yellow";
             keyboardColors[guessedLetter] = "yellow";
-          tempWord[correctPositionOfLetter] = "";
+            tempWord[correctPositionOfLetter] = "";
+
+            regHori = regHori + "(?=.*" + guessedLetter + ")" + "(?=" + regHoriLag + "[^" + guessedLetter + "])"; //letra horia hitzean dagoela baina ez dagoen posizioan ez dagoela jartzen da.
         } else {
           // This means the letter is not in the word of the day.
             updatedMarkers[_round][index] = "grey";
             keyboardColors[guessedLetter] = "grey";
+
+            regHoriLag = regHoriLag + "."; //expresio erregular horiko posizio horretan edozein letra egon daitekeela jartzen da.
+
+            regGris = regGris + guessedLetter; //expresio erregular grisean letra ez dagoela jartzen da.
+            regGrisLag = regGris; //expresio erregular gris laguntzailea aldatzen da letra gris bat topatu delako.
           }
       });
+
+        regHori = regHori + ".*$"; //expresio erregular horia bukatzen da.
+
+        if (regGrisLag === regGris) {
+            regGrisLag = regGrisLag + "]{5}$";//letra grisak topatu badira, expresio erregular grisari amaiera eman.
+        }
+
+        for (const hitza in wordsArrayLaguntza) {
+            if (!hitza.match("/" + regBerde + "/i") | !hitza.match("/" + regHori + "/i") | !hitza.match("/" + regGrisLag + "/i")) { //ez bada expresio erregularretako bat betetzen bakarrik egin
+                const index = wordsArrayLaguntza.indexOf(hitza);
+                if (index > -1) {
+                    wordsArrayLaguntza.splice(index, 1); // baldintzak betetzen ez dituzten hitzak kentzen dira.
+                }
+            }
+        }
 
         if (_round == 5) {
             gameOver();
