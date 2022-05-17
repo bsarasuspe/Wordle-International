@@ -51,6 +51,8 @@ var wordsArrayES = [];
 var wordsArrayEU = [];
 var wordsArrayEN = [];
 
+var readJson = "true"
+
 var wordsArrayLaguntza = []; // Laguntza eskatzerakoan agertuko diren hitzak gordetzeko
 
 var showWord = "";
@@ -99,17 +101,27 @@ function App() {
         lang = "es";
     };
 
-    JsonDataEU.hitzak && JsonDataEU.hitzak.map(item => {
-        return (wordsArrayEU.push(item.hitza))
-    });
+    wordsArrayEU = [];
+    wordsArrayES = [];
+    wordsArrayEN = [];
 
-    JsonDataES.hitzak && JsonDataES.hitzak.map(item => {
-        return (wordsArrayES.push(item.hitza))
-    });
+    if (wordsArrayEU.length == 0) {
+        JsonDataEU.hitzak && JsonDataEU.hitzak.map(item => {
+            return (wordsArrayEU.push(item.hitza))
+        });
+    }
 
-    JsonDataEN.hitzak && JsonDataEN.hitzak.map(item => {
-        return (wordsArrayEN.push(item.hitza))
-    });
+    if (wordsArrayES.length == 0) {
+        JsonDataES.hitzak && JsonDataES.hitzak.map(item => {
+            return (wordsArrayES.push(item.hitza))
+        });
+    }
+
+    if (wordsArrayEN.length == 0) {
+        JsonDataEN.hitzak && JsonDataEN.hitzak.map(item => {
+            return (wordsArrayEN.push(item.hitza))
+        });
+    }
 
 //  console.log(wordsArray);
 
@@ -121,19 +133,26 @@ function App() {
         console.log(max);
         const rand = min + Math.random() * (max - min);
         wordOfTheDay = wordsArrayES[parseInt(rand)];
-        wordsArrayLaguntza = wordsArrayES; // Erabiliko den hiztegiaren kopia bat gorde laguntzarako erabiltzeko
+        if (wordsArrayLaguntza.length == 0) {
+            wordsArrayLaguntza = wordsArrayES; // Erabiliko den hiztegiaren kopia bat gorde laguntzarako erabiltzeko
+        }
+
     } else if (lang == "eu") {
         const min = 0;
         const max = wordsArrayEU.length;
         const rand = min + Math.random() * (max - min);
         wordOfTheDay = wordsArrayEU[parseInt(rand)];
-        wordsArrayLaguntza = wordsArrayEU;
+        if (wordsArrayLaguntza.length == 0) {
+            wordsArrayLaguntza = wordsArrayEU;
+        }
     } else {
         const min = 0;
         const max = wordsArrayEN.length;
         const rand = min + Math.random() * (max - min);
         wordOfTheDay = wordsArrayEN[parseInt(rand)];
-        wordsArrayLaguntza = wordsArrayEN;
+        if (wordsArrayLaguntza.length == 0) {
+            wordsArrayLaguntza = wordsArrayEN;
+        }
     }
 
   const [guesses, setGuesses] = useState({ ...newGame });
@@ -268,15 +287,6 @@ function App() {
             regGrisLag = regGrisLag + "]{5}$";//letra grisak topatu badira, expresio erregular grisari amaiera eman.
         }
 
-        for (const hitza in wordsArrayLaguntza) {
-            if (!hitza.match("/" + regBerde + "/i") | !hitza.match("/" + regHori + "/i") | !hitza.match("/" + regGrisLag + "/i")) { //ez bada expresio erregularretako bat betetzen bakarrik egin
-                const index = wordsArrayLaguntza.indexOf(hitza);
-                if (index > -1) {
-                    wordsArrayLaguntza.splice(index, 1); // baldintzak betetzen ez dituzten hitzak kentzen dira.
-                }
-            }
-        }
-
         if (_round == 5) {
             gameOver();
         }
@@ -285,6 +295,25 @@ function App() {
     setMarkers(updatedMarkers);
     round.current = _round + 1;
     letterIndex.current = 0;
+      var kont = 0;
+      for (const hitza in wordsArrayLaguntza) {
+          console.log(regBerde);
+          console.log(regHori);
+          console.log(regGrisLag);
+          
+          if ((!wordsArrayLaguntza[hitza].match("/" + regBerde + "/i")) | (!wordsArrayLaguntza[hitza].match("/" + regHori + "/i")) | (!wordsArrayLaguntza[hitza].match("/" + regGrisLag + "/i"))) { //ez bada expresio erregularretako bat betetzen bakarrik egin
+              kont++;
+              console.log("kendu");
+              const index = wordsArrayLaguntza.indexOf(hitza);
+              if (index > -1) {
+                  wordsArrayLaguntza.splice(index, 1); // baldintzak betetzen ez dituzten hitzak kentzen dira.
+              }
+          }
+      }
+      console.log("kendu dira: "+kont);
+      console.log("Ondoren:");
+      console.log(wordsArrayLaguntza.length);
+      console.log(wordsArrayLaguntza);
   };
 
   const erase = () => {
