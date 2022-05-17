@@ -51,6 +51,8 @@ var wordsArrayES = [];
 var wordsArrayEU = [];
 var wordsArrayEN = [];
 
+var wordsArrayLaguntza = []; // Laguntza eskatzerakoan agertuko diren hitzak gordetzeko
+
 var showWord = "";
 
 const newGame = {
@@ -129,16 +131,25 @@ function App() {
         console.log(max);
         const rand = min + Math.random() * (max - min);
         wordOfTheDay = wordsArrayES[parseInt(rand)];
+        if (wordsArrayLaguntza.length == 0) {
+            wordsArrayLaguntza = wordsArrayES; // Erabiliko den hiztegiaren kopia bat gorde laguntzarako erabiltzeko
+        }
     } else if (lang == "eu") {
         const min = 0;
         const max = wordsArrayEU.length;
         const rand = min + Math.random() * (max - min);
         wordOfTheDay = wordsArrayEU[parseInt(rand)];
+        if (wordsArrayLaguntza.length == 0) {
+            wordsArrayLaguntza = wordsArrayEU;
+        }
     } else {
         const min = 0;
         const max = wordsArrayEN.length;
         const rand = min + Math.random() * (max - min);
         wordOfTheDay = wordsArrayEN[parseInt(rand)];
+        if (wordsArrayLaguntza.length == 0) {
+            wordsArrayLaguntza = wordsArrayEN;
+        }
     }
 
   const [guesses, setGuesses] = useState({ ...newGame });
@@ -266,6 +277,12 @@ function App() {
             regGrisLag = regGris; //expresio erregular gris laguntzailea aldatzen da letra gris bat topatu delako.
           }
       });
+
+        regHori = regHori + ".*$"; //expresio erregular horia bukatzen da.
+
+        if (regGrisLag === regGris) {
+            regGrisLag = regGrisLag + "]{5}$";//letra grisak topatu badira, expresio erregular grisari amaiera eman.
+        }
 
         if (_round == 5) {
             gameOver();
