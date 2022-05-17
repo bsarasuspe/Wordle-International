@@ -51,6 +51,8 @@ var wordsArrayES = [];
 var wordsArrayEU = [];
 var wordsArrayEN = [];
 
+var hasLetter = [];
+
 var wordsArrayLaguntza = []; // Laguntza eskatzerakoan agertuko diren hitzak gordetzeko
 
 var showWord = "";
@@ -166,6 +168,7 @@ function App() {
   const [isErrorModalVisible, setErrorModalVisible] = useState(false);
   const [isGameOverModalVisible, setGameOverModalVisible] = useState(false);
   const [isLanguageModalVisible, setLanguageModalVisible] = useState(false);
+  const [isHelpModalVisible, setHelpModalVisible] = useState(false);
   const [isShared, setIsShared] = useState(false);
 
   let letterIndex = useRef(0);
@@ -205,6 +208,14 @@ function App() {
         setLanguageModalVisible(false);
     };
 
+    const help = () => {
+        setHelpModalVisible(true);
+    };
+
+    const closeHelp = () => {
+        setHelpModalVisible(false);
+    };
+
   const submit = () => {
     const _round = round.current;
 
@@ -230,7 +241,8 @@ function App() {
 
       if (guessedLetter === letter) {
         updatedMarkers[_round][index] = "green";
-        keyboardColors[letter] = "green";
+          keyboardColors[letter] = "green";
+          hasLetter.push(letter);
           tempWord[index] = "";
 
           regBerde = regBerde + guessedLetter; //asmatutako letra dagokion posizioan jartzen da expresioan.
@@ -274,8 +286,11 @@ function App() {
 
             regHoriLag = regHoriLag + "."; //expresio erregular horiko posizio horretan edozein letra egon daitekeela jartzen da.
 
-            regGris = regGris + guessedLetter; //expresio erregular grisean letra ez dagoela jartzen da.
-            regGrisLag = regGris; //expresio erregular gris laguntzailea aldatzen da letra gris bat topatu delako.
+            if (!hasLetter.includes(guessedLetter)) {
+                regGris = regGris + guessedLetter; //expresio erregular grisean letra ez dagoela jartzen da.
+                regGrisLag = regGris; //expresio erregular gris laguntzailea aldatzen da letra gris bat topatu delako.
+            }
+            
           }
       });
 
@@ -415,7 +430,7 @@ function App() {
   return (
     <>
       <Main>
-              <Header><ShareButton onClick={language}>{texts[lang][0]}</ShareButton> WORDLE <ShareButton onClick={language}>{texts[lang][1]}</ShareButton></Header>
+              <Header><ShareButton onClick={language}>{texts[lang][0]}</ShareButton> WORDLE <ShareButton onClick={help}>{texts[lang][1]}</ShareButton></Header>
         <GameSection>
           <TileContainer>
             {Object.values(guesses).map((word, wordIndex) => (
@@ -540,6 +555,31 @@ function App() {
                           <a href="./?language=eu"><ShareButton>Euskera</ShareButton></a>
                           <a href="./?language=es"><ShareButton>Castellano</ShareButton></a></center></Row>
                           <center><ShareButton onClick={closeLanguage}>{texts[lang][7]}</ShareButton></center>
+                  </ShareModal>
+              </Modal>
+              <Modal
+                  isOpen={isHelpModalVisible}
+                  onRequestClose={() => setHelpModalVisible(false)}
+                  style={{
+                      content: {
+                          top: "50%",
+                          left: "50%",
+                          right: "auto",
+                          bottom: "auto",
+                          marginRight: "-50%",
+                          transform: "translate(-50%, -50%)",
+                      },
+                  }}
+                  contentLabel="Share">
+                  <ShareModal>
+                      <Row>
+                          <h3>Hitz posibleak:</h3>
+                      </Row>
+                      <Row><div style={{ width: "250px"}}>
+                          {wordsArrayLaguntza.map(word => <div style={{ float: "left" }}>{word} &nbsp;</div>)}
+                      </div></Row>
+                      
+                      <center><ShareButton onClick={closeHelp}>{texts[lang][7]}</ShareButton></center>
                   </ShareModal>
               </Modal>
       </div>

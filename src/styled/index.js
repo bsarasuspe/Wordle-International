@@ -162,6 +162,9 @@ export const Flex = styled.div`
 
 export const ShareModal = styled.div`
   font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+  max-width:500px;
+  max-height:400px;
+  font-size:14px;
 `;
 
 export const wordNotExistModal = styled.div`
@@ -204,4 +207,5 @@ export const Row = styled.div`
   justify-content: space-between;
   font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
   margin: 16px auto;
+  font-size:14px;
 `;
