@@ -45,7 +45,7 @@ const allKeys = keyboardRows.flat();
 
 const wordLength = 5;
 
-const keyboardDisabled = "false";
+var keyboardDisabled = "false";
 
 var wordsArrayES = [];
 var wordsArrayEU = [];
