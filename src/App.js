@@ -130,7 +130,6 @@ function App() {
     if (lang == "es") {
         const min = 0;
         const max = wordsArrayES.length;
-        console.log(max);
         const rand = min + Math.random() * (max - min);
         wordOfTheDay = wordsArrayES[parseInt(rand)];
         if (wordsArrayLaguntza.length == 0) {
@@ -189,11 +188,9 @@ function App() {
     };
 
     const gameOver = () => {
-        console.log(wordOfTheDay);
         setGameOverModalVisible(true);
         document.removeEventListener("keydown", handleKeyDown);
         keyboardDisabled = true;
-        console.log(wordOfTheDay);
     };
 
     const closeGameOver = () => {
@@ -224,7 +221,6 @@ function App() {
     };
 
       const tempWord = wordOfTheDay.split("");
-      console.log(wordOfTheDay);
       showWord = wordOfTheDay;
 
     const leftoverIndices = [];
@@ -318,7 +314,6 @@ function App() {
               i++;
           }
       }
-      console.log(wordsArrayLaguntza);
   };
 
   const erase = () => {
